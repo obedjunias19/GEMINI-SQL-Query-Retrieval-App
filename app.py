@@ -8,7 +8,10 @@ import google.generativeai as genai
 # load_dotenv()
 
 # Configure Google API Key
-os.environ["ST_GOOGLE_API_KEY"] == st.secrets["ST_GOOGLE_API_KEY"]
+st.write(
+	"Has environment variables been set:",
+	os.environ["ST_GOOGLE_API_KEY"] == st.secrets["ST_GOOGLE_API_KEY"])
+
 genai.configure(api_key=os.getenv("ST_GOOGLE_API_KEY"))
 
 # Function to load Google Gemini Model and provide queries as response
