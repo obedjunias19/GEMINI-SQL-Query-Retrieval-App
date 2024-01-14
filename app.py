@@ -49,28 +49,32 @@ prompt = [
     """
 ]
 
+def main():
+    # Streamlit App
+    st.set_page_config(page_title="Gemini SQL Query Data Retrieval App", page_icon="✨")
 
-# Streamlit App
-st.set_page_config(page_title="Gemini SQL Query Data Retrieval App", page_icon="✨")
+    # App header
+    st.title("🔮 Gemini App: Retrieve SQL Data with Magic ✨")
 
-# App header
-st.title("🔮 Gemini App: Retrieve SQL Data with Magic ✨")
+    # User input for the question
+    question = st.text_input("🤔 ✨ Ask me a question about the STUDENT database:", key="input")
 
-# User input for the question
-question = st.text_input("🤔 ✨ Ask me a question about the STUDENT database:", key="input")
+    # Button to submit the question
+    submit = st.button("🚀 Ask me the question")
 
-# Button to submit the question
-submit = st.button("🚀 Ask me the question")
+    # Handle submit action
+    if submit:
+        # Get response from Gemini model
+        gemini_response = generate_gemini_response(question, prompt)
+        
+        # Execute SQL query based on the response
+        sql_query_response = execute_sql_query(gemini_response, "student.db")
+        
+        # Display the SQL query response
+        st.subheader("🌈 The SQL Query Response is:")
+        for row in sql_query_response:
+            st.success(row)
 
-# Handle submit action
-if submit:
-    # Get response from Gemini model
-    gemini_response = generate_gemini_response(question, prompt)
-    
-    # Execute SQL query based on the response
-    sql_query_response = execute_sql_query(gemini_response, "student.db")
-    
-    # Display the SQL query response
-    st.subheader("🌈 The SQL Query Response is:")
-    for row in sql_query_response:
-        st.success(row)
+
+if __name__ == '__main__':
+    main()
