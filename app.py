@@ -7,29 +7,6 @@ import google.generativeai as genai
 # Load environment variables
 # load_dotenv()
 
-# Configure Google API Key
-st.write(
-	"Has environment variables been set:",
-	os.environ["ST_GOOGLE_API_KEY"] == st.secrets["ST_GOOGLE_API_KEY"])
-
-genai.configure(api_key=os.getenv("ST_GOOGLE_API_KEY"))
-
-# Function to load Google Gemini Model and provide queries as response
-def generate_gemini_response(question, prompt):
-    model = genai.GenerativeModel('gemini-pro')
-    response = model.generate_content([prompt[0], question])
-    return response.text
-
-# Function to retrieve query from the database
-def execute_sql_query(sql, db):
-    conn = sqlite3.connect(db)
-    cur = conn.cursor()
-    cur.execute(sql)
-    rows = cur.fetchall()
-    conn.commit()
-    conn.close()
-    return rows
-
 # Define Your Prompt
 prompt = [
     """
@@ -50,8 +27,34 @@ prompt = [
 ]
 
 def main():
+
     # Streamlit App
     st.set_page_config(page_title="Gemini SQL Query Data Retrieval App", page_icon="✨")
+
+    # Configure Google API Key
+    st.write(
+        "Has environment variables been set:",
+        os.environ["ST_GOOGLE_API_KEY"] == st.secrets["ST_GOOGLE_API_KEY"])
+
+    genai.configure(api_key=os.getenv("ST_GOOGLE_API_KEY"))
+
+    # Function to load Google Gemini Model and provide queries as response
+    def generate_gemini_response(question, prompt):
+        model = genai.GenerativeModel('gemini-pro')
+        response = model.generate_content([prompt[0], question])
+        return response.text
+
+    # Function to retrieve query from the database
+    def execute_sql_query(sql, db):
+        conn = sqlite3.connect(db)
+        cur = conn.cursor()
+        cur.execute(sql)
+        rows = cur.fetchall()
+        conn.commit()
+        conn.close()
+        return rows
+
+    
 
     # App header
     st.title("🔮 Gemini App: Retrieve SQL Data with Magic ✨")
@@ -74,7 +77,6 @@ def main():
         st.subheader("🌈 The SQL Query Response is:")
         for row in sql_query_response:
             st.success(row)
-
 
 if __name__ == '__main__':
     main()
