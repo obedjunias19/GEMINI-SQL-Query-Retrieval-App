@@ -1,13 +1,14 @@
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import streamlit as st
 import os
 import sqlite3
 import google.generativeai as genai
 
 # Load environment variables
-load_dotenv()
+# load_dotenv()
 
 # Configure Google API Key
+os.environ["GOOGLE_API_KEY"] == st.secrets["ST_GOOGLE_API_KEY"]
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Function to load Google Gemini Model and provide queries as response
